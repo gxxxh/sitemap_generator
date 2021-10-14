@@ -1,4 +1,6 @@
-from lxml import etree
+import os
+from source.parsegitpage import ParseGitPage
+from source.config import *
 # html字符串
 
 
@@ -6,15 +8,8 @@ from lxml import etree
 
 
 if __name__ == "__main__":
-    html_str = """
-    <html>
-    <head>
-    <title>demo</title>
-    </head>
-    <body>
-    <p>1111111</p>
-    </body>
-    </html>
-    """
-    html = etree.HTML(html_str)
-    type(html)  # 输出结果为：lxml.etree._Element
+    dir = os.path.join(WORKPATH, "TVMChinese")
+    parser = ParseGitPage(dir=dir,html=HTMLSUFFIX,root_url=ROOTURL)
+    parser.add_homepage()
+    pt = parser.parse_dir("")
+    parser.save("TVMChinese.xml")

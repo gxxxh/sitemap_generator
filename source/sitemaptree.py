@@ -1,4 +1,5 @@
 import logging
+import source.config as config
 from lxml import etree
 
 class SitemapTree:
@@ -7,9 +8,9 @@ class SitemapTree:
         urlset is a list of URLs that should appear in the sitemap
         :param xmlns: html namespace
         """
-        # self.urlset = None
         self.urlset = etree.Element('urlset')
         self.urlset.attrib['xmlns'] = xmlns
+
 
     def get_root(self):
         """
@@ -21,9 +22,19 @@ class SitemapTree:
     def get_node(self, url):
         """
         find node by its url
-        :param url:
-        :return:
+        :param url: url of the html
+        :return: url node
         """
+        cnodes = self.urlset.getchildren()
+        for cnode in cnodes:
+            loc_node = cnode.find('loc')
+            if loc_node is None:
+                logging.error("there should be a loc in url")
+            if url == loc_node.text:
+                return cnode
+        return None
+
+
 
     def add_url(self, **kwargs):
         """
@@ -37,8 +48,8 @@ class SitemapTree:
         url = etree.Element('url')
         # loc
         loc = etree.Element('loc')
-        if kwargs.get('url')!=None:
-            loc.text = kwargs['url']
+        if kwargs.get('loc')!=None:
+            loc.text = kwargs['loc']
         else:
             logging.error('the url is None')
             return None
@@ -62,16 +73,24 @@ class SitemapTree:
 
         priority = etree.Element('priority')
         if kwargs.get('priority')!=None:
-            priority.text = kwargs['priority']
+            priority.text = str(kwargs['priority'])
         else:
-            priority.text = 0.5
+            priority.text = str(0.5)
         url.append(priority)
 
         self.urlset.append(url)
         return url
 
-    def save(self):
-        pass
+    def save(self,file_name):
+        """
+        savt sitemap to xml
+        :param file_name:
+        :return:
+        """
+        f = open(file_name, 'wb')
+        f.write(etree.tostring(self.urlset, xml_declaration=True, encoding=config.ENC_UTF8))
+        f.close()
+        print('Sitemap saved in: ', file_name)
 
 
 
