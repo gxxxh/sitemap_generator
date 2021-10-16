@@ -5,7 +5,7 @@ from datetime import datetime, timezone, timedelta
 
 
 class DirToSitemap:
-    def __init__(self, dir, html, root_url, home_page, change_freq,format):
+    def __init__(self, dir, html, root_url, home_page, change_freq, nsmap):
         """
         初始化一个sitemap对象
         :param dir: 文件夹目录
@@ -13,9 +13,9 @@ class DirToSitemap:
         :param root_url: 根域名
         :param home_page: 主页文件名
         :param change_freq: 网页修改频率
-        :param format: sitemap格式
+        :param nsmap: sitemap格式
         """
-        self.sitemap_tree = SitemapTree(format)
+        self.sitemap_tree = SitemapTree(namespace=nsmap, file="")
         self.dir_path = dir
         self.html = html
         self.root_url = root_url
@@ -28,7 +28,6 @@ class DirToSitemap:
         添加主页对应的结点
         :return:
         """
-        # file_path = config.work_path + '/' + config.homepage_file
         file_path = os.path.join(self.dir_path, self.home_page)
         if os.path.exists(file_path):
             self.add_file("", homepage=1)
@@ -85,7 +84,6 @@ class DirToSitemap:
         # 获得带时区的UTC时间
         current_time_utc = datetime.utcnow().replace(tzinfo=tz_utc)
         lastmod = datetime.strftime(current_time_utc, '%Y-%m-%dT%H:%M:%S+00:00')
-        # changefreq = config.change_freq
         cur_node = self.sitemap_tree.add_url(loc=url, lastmod=lastmod, changefreq=self.change_freq, priority=priority)
         if cur_node == None:
             logging.error("add file " + rpath + " failed.")

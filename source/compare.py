@@ -1,4 +1,5 @@
 import os
+import logging
 from source.dirtositemap import DirToSitemap
 from source.config import *
 from source.sitemaptree import SitemapTree
@@ -52,7 +53,7 @@ def compare(old_dir, new_dir, old_sitemap, ):
     :return:
     """
     sitemap = DirToSitemap(dir=new_dir, html=HTMLSUFFIX, root_url=ROOTURL, home_page=HOMEPAGE,
-                           change_freq=CHANGEFREQ_PATTERNS[3], format=XMLNS)
+                           change_freq=CHANGEFREQ_PATTERNS[3], nsmap=XMLNS)
     sitemap.add_homepage()
     pt = sitemap.parse_dir("")
 
@@ -62,9 +63,20 @@ def compare(old_dir, new_dir, old_sitemap, ):
         old_apath, new_apath = os.path.join(old_dir, rpath), os.path.join(new_dir, rpath)
         if os.path.exists(new_apath) and os.path.exists(old_apath):
             if cmp_file(old_apath, new_apath) is True:  # 更新lastmod
-                url = sitemap.path_to_url(rpath)
-                old_node = pt_old.get_node(url)
-                new_node = pt.get_node(url)
+                if sitemap.html is True:
+                    url_html = sitemap.path_to_url(rpath)
+                    new_node = pt.get_node(url_html)
+                else:
+                    url_html = sitemap.path_to_url(rpath)+'.html'
+                    new_node = pt.get_node(url_html[0:-5])
+
+                old_node = pt_old.get_node(url_html)
+                if old_node is None:# 可能旧的sitemap中url不是以xml结尾
+                    old_node = pt_old.get_node(url_html[0:-5])
+                if old_node is None:# 没有找到对应的sitemap结点
+                    logging.error("no site map for file in {}".format(old_apath))
+                    continue
+                logging.info("change file {} lastmod".format(rpath))
                 old_lastmod = old_node.find('lastmod', namespaces=old_node.nsmap).text
                 new_node.find('lastmod', namespaces=new_node.nsmap).text = old_lastmod
     return pt
