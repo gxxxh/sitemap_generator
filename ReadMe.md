@@ -29,6 +29,11 @@
 ```
 
 
+## example
+1. index.html文件内容修改
+2. 新增了release_process.html
+3. 删除了pull_request.html
+
 ## 参考
 [google sitemap](https://www.cnblogs.com/doinbean/p/8488466.html)
 [Sitemaps XML format](https://www.sitemaps.org/protocol.html)

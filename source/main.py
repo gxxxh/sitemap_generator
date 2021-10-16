@@ -1,5 +1,5 @@
 import os
-from source.parsegitpage import ParseGitPage
+from source.dirtositemap import DirToSitemap
 from source.config import *
 # html字符串
 
@@ -8,8 +8,8 @@ from source.config import *
 
 
 if __name__ == "__main__":
-    dir = os.path.join(WORKPATH, "TVMChinese")
-    parser = ParseGitPage(dir=dir,html=HTMLSUFFIX,root_url=ROOTURL)
-    parser.add_homepage()
-    pt = parser.parse_dir("")
-    parser.save("TVMChinese.xml")
+    dir = r'D:\研一\sitemap\sitemap_generator\example\test_old'
+    sitemap = DirToSitemap(dir=dir, html=HTMLSUFFIX, root_url=ROOTURL, home_page=HOMEPAGE, change_freq=CHANGEFREQ_PATTERNS[3],format=XMLNS)
+    sitemap.add_homepage()
+    pt = sitemap.parse_dir("")
+    sitemap.save(r"D:\研一\sitemap\sitemap_generator\example\test_old.xml")
