@@ -80,7 +80,7 @@ class DirToSitemap:
         :return:
         """
         if rpath == self.home_page:
-            return 1
+            return self.priorities[0]
         if (platform.system() == 'Windows'):
             rpath = '/'.join(rpath.split('\\'))
         depth = rpath.count('/')
@@ -97,7 +97,7 @@ class DirToSitemap:
         #     url = self.root_url
         #     priority = self.priorities[0]
         # else:
-        url = self.path_to_url(rpath,self.html)
+        url = self.path_to_url(rpath, self.html)
         priority = self.get_priority(rpath)
         # 获得带时区的UTC时间
         current_time_utc = datetime.utcnow().replace(tzinfo=self.tz)

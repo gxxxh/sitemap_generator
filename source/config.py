@@ -1,6 +1,6 @@
 # dir html path
-HTMLPATH = r'/mnt/d/研一/sitemap/example/html'
-
+HTMLPATH = r'/mnt/d/研一/sitemap/example/TVMChinese'
+# HTMLPATH = r'/mnt/d/研一/sitemap/example/html'
 # dir html_old path
 HTMLOLDPATH = r'/mnt/d/研一/sitemap/example/html_old'
 
@@ -18,6 +18,7 @@ HOMEPAGE = "index.html"
 
 # Text encodings
 ENC_UTF8 = 'UTF-8'
+
 # General Sitemap tags
 GENERAL_SITEMAP_TAGS = [
     'loc', 'changefreq', 'priority', 'lastmod'
@@ -30,7 +31,7 @@ CHANGEFREQ_PATTERNS = [
 
 # PRIORITIES
 PRIORITIES = [
-    "1", "0.8", "0.64", "0.51", "0.41", "0.33", "0.26", "0.21"
+    "1.0", "0.8", "0.64", "0.51", "0.41", "0.33", "0.26", "0.21"
 ]
 
 # sitemap namespace

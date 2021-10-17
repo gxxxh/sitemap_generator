@@ -67,15 +67,16 @@ def compare(old_dir, new_dir, old_sitemap, ):
         old_apath, new_apath = os.path.join(old_dir, rpath), os.path.join(new_dir, rpath)
         if os.path.exists(new_apath) and os.path.exists(old_apath):
             if cmp_file(old_apath, new_apath) == True:  # 更新lastmod
-                url_html = sitemap.path_to_url(rpath,True)
-                url_nhtml = sitemap.path_to_url(rpath,False)
+                url_html = sitemap.path_to_url(rpath, True)
+                url_nhtml = sitemap.path_to_url(rpath, False)
                 if sitemap.html == True:
                     new_node = pt.get_node(url_html)
                 else:
                     new_node = pt.get_node(url_nhtml)
 
                 if new_node == None:
-                    logging.error("the node in new sitemap should not be none, path is {},url is {}".format(rpath,url_html))
+                    logging.error(
+                        "the node in new sitemap should not be none, path is {},url is {}".format(rpath, url_html))
                 old_node = pt_old.get_node(url_html)
                 if old_node == None:  # 可能旧的sitemap中url不是html结尾
                     old_node = pt_old.get_node(url_nhtml)
@@ -89,17 +90,24 @@ def compare(old_dir, new_dir, old_sitemap, ):
     return pt
 
 
-
-
 if __name__ == "__main__":
     logging.basicConfig(level=logging.ERROR,  # 控制台打印的日志级别
                         format=LOGGINTFORMAT,
                         )
-    html = HTMLPATH
-    html_old = HTMLOLDPATH
-    old_sitemap = OLDSITEMAPPATH
+    # 对比html和html_old生成sitemap
+    # html = HTMLPATH
+    # html_old = HTMLOLDPATH
+    # old_sitemap = OLDSITEMAPPATH
     # pt = compare(html_old, html, old_sitemap)
+    # pt.sort()
     # pt.save(NEWSITEMAPPATH)
-    pt_test = SitemapTree(file=NEWSITEMAPPATH)
-    pt_test.sort()
-    pt_test.save(NEWSITEMAPPATH)
+
+    # 通过文件夹直接生成sitemap
+    dir_path = HTMLPATH
+    sitemap = DirToSitemap(dir=dir_path, html=HTMLSUFFIX, root_url=ROOTURL, home_page=HOMEPAGE,
+                           change_freq=CHANGEFREQ_PATTERNS[3], nsmap=XMLNS, priorities=PRIORITIES, time_zone=TIMEZONE,
+                           time_pattern=LASTMODFORMAT)
+    # sitemap.add_homepage()
+    pt = sitemap.parse_dir("")
+    pt.sort()
+    pt.save(NEWSITEMAPPATH)

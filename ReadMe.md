@@ -29,78 +29,47 @@
 ```
 
 
-## example
-### 删除(url项删除)
-1. errors.html
-2. arch/frontend/tensorflow.html
-### 修改（重新设定lastmod)
-1. search.html
-2. arch/runtimes/vulkan.html
-### 未修改（lastmod不变）
-1. arch/benchmark.html
-2. ...
-
-
-###  sitemap 对比
-#### oldsitemap
+## 使用
+### 使用方式
+1. 通过单个html文件夹创建sitemap
 ```
--<url>
-<loc>https://tvmchinese.github.io/errors.html</loc>
-<lastmod>2021-10-16T13:02:12+00:00</lastmod>
-<changefreq>weekly</changefreq>
-<priority>0.8</priority>
-</url>
-
--<url>
-<loc>https://tvmchinese.github.io/arch/frontend/tensorflow.html</loc>
-<lastmod>2021-10-16T13:02:12+00:00</lastmod>
-<changefreq>weekly</changefreq>
-<priority>0.51</priority>
-</url>
-
--<url>
-<loc>https://tvmchinese.github.io/search.html</loc>
-<lastmod>2021-10-16T13:02:12+00:00</lastmod>
-<changefreq>weekly</changefreq>
-<priority>0.8</priority>
-</url>
-
--<url>
-<loc>https://tvmchinese.github.io/arch/runtimes/vulkan.html</loc>
-<lastmod>2021-10-16T13:02:12+00:00</lastmod>
-<changefreq>weekly</changefreq>
-<priority>0.51</priority>
-</url>
-
--<url>
-<loc>https://tvmchinese.github.io/arch/benchmark.html</loc>
-<lastmod>2021-10-16T13:02:12+00:00</lastmod>
-<changefreq>weekly</changefreq>
-<priority>0.64</priority>
-</url>
+	dir_path = HTMLPATH
+    sitemap = DirToSitemap(dir=dir_path, html=HTMLSUFFIX, root_url=ROOTURL, home_page=HOMEPAGE,
+                           change_freq=CHANGEFREQ_PATTERNS[3], nsmap=XMLNS, priorities=PRIORITIES, time_zone=TIMEZONE,
+                           time_pattern=LASTMODFORMAT)
+    # sitemap.add_homepage()
+    pt = sitemap.parse_dir("")
+    pt.sort()
+    pt.save(NEWSITEMAPPATH)
 ```
-#### new sitemap
+2. 对比html_old和html生成新的sitemap
 ```
--<url>
-<loc>https://tvmchinese.github.io/search.html</loc>
-<lastmod>2021-10-16T13:20:48+00:00</lastmod>
-<changefreq>weekly</changefreq>
-<priority>0.8</priority>
-</url>
--<url>
-<loc>https://tvmchinese.github.io/arch/runtimes/vulkan.html</loc>
-<lastmod>2021-10-16T13:20:48+00:00</lastmod>
-<changefreq>weekly</changefreq>
-<priority>0.51</priority>
-</url>
--<url>
-<loc>https://tvmchinese.github.io/arch/benchmark.html</loc>
-<lastmod>2021-10-16T13:02:12+00:00</lastmod>
-<changefreq>weekly</changefreq>
-<priority>0.64</priority>
-</url>
+    html = HTMLPATH
+    html_old = HTMLOLDPATH
+    old_sitemap = OLDSITEMAPPATH
+    pt = compare(html_old, html, old_sitemap)
+    pt.sort()
+    pt.save(NEWSITEMAPPATH)
 ```
+
+### 参数说明(修改config.py中参数)
+1. HTMLPATH: 文件夹html的绝对路径
+2. HTMLOLDPATH: 文件夹html_old的绝对路径
+3. OLDSITEMAPPATH: sitemap_old的绝对路径
+4. NEWSITEMAPPATH: 生成sitemap的存储路径
+5. ROOTURL: html对应网页的根域名
+6. HOMEPAGE：网页主页对应的html文件名
+7. HTMLSUFFIX: 生成sitemap中url是否包含.html后缀
+8. ENC_UTF8：sitemap编码方式
+9. CHANGEFREQ_PATTERNS：changefreq可选参数
+10. PRIORITIES: sitemap 优先级设置（对应文件在目录中的深度），主页优先级为1.0
+11. XMLNS: sitemap的namespace
+12. LASTMODFORMAT: lastmod字符串格式
+13. TIMEZONE: 时区
+
+
 ## 参考
 1. [google sitemap](https://developers.google.com/search/docs/advanced/sitemaps/build-sitemap)
 2. [Sitemaps XML format](https://www.sitemaps.org/protocol.html)
 3. [python lxml](https://lxml.de/3.8/index.html)
+4. [sitemap validator](https://www.mysitemapgenerator.com/service/check.html)

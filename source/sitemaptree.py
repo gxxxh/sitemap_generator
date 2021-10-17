@@ -10,7 +10,7 @@ class SitemapTree:
         :param file: xml文件，若为空则创建空的url set, 否则直接从文件中解析
         """
         if file == "":  # 初始化一个只有根节点的sitemaptree
-            self.etree=None
+            self.etree = None
             self.urlset = etree.Element('urlset')
             self.nsmap = namespace
             self.urlset.attrib['xmlns'] = self.nsmap
@@ -30,7 +30,6 @@ class SitemapTree:
     def get_lastmod(url_node):
         cnodes = url_node.getnodes()
 
-
     def get_node(self, url):
         """
         find node by its url
@@ -41,7 +40,7 @@ class SitemapTree:
         for cnode in cnodes:
             loc_node = cnode.find('loc', namespaces=cnode.nsmap)
             if loc_node == None:
-                logging.error("there should be a loc in url,url is {},cnode is {}".format(url,cnode))
+                logging.error("there should be a loc in url,url is {},cnode is {}".format(url, cnode))
                 continue
             if url == loc_node.text:
                 return cnode
@@ -97,13 +96,12 @@ class SitemapTree:
         """
         获取url对象的网址，用于排序
         """
-        loc_node = node.find('loc',namespaces=node.nsmap)
+        loc_node = node.find('loc', namespaces=node.nsmap)
         if loc_node is None:
             t = etree.tostring(node, pretty_print=1).decode("utf-8")
             logging.error("node \n {} does not include loc".format(t))
             return ""
         return loc_node.text
-
 
     def sort(self):
         """
@@ -111,8 +109,6 @@ class SitemapTree:
         """
         urls = self.urlset
         urls[:] = sorted(self.urlset, key=self.get_url)
-
-
 
     def save(self, file_name):
         """
