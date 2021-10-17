@@ -10,10 +10,10 @@ class SitemapTree:
         :param file: xml文件，若为空则创建空的url set, 否则直接从文件中解析
         """
         if file == "":  # 初始化一个只有根节点的sitemaptree
-            self.etree = None
             self.urlset = etree.Element('urlset')
             self.nsmap = namespace
             self.urlset.attrib['xmlns'] = self.nsmap
+            self.etree = etree.ElementTree(self.urlset)
         else:  # 从xml文件中读取sitemaptree
             self.etree = etree.parse(file, etree.XMLParser())
             self.urlset = self.etree.getroot()
@@ -116,10 +116,12 @@ class SitemapTree:
         :param file_name:
         :return:
         """
+
         try:
-            f = open(file_name, 'wb')
-            f.write(etree.tostring(self.urlset, xml_declaration=True, encoding='UTF-8'))
-            f.close()
+            # f = open(file_name, 'wb')
+            # f.write(etree.tostring(self.urlset, xml_declaration=True, encoding='UTF-8'))
+            # f.close()
+            self.etree.write(file_name, pretty_print=True, xml_declaration=True, encoding="utf-8")
             logging.info('Sitemap saved in: {}'.format(file_name))
         except:
             logging.error("save " + file_name + " sitemap failed")
