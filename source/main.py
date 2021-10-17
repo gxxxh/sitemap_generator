@@ -89,6 +89,8 @@ def compare(old_dir, new_dir, old_sitemap, ):
     return pt
 
 
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.ERROR,  # 控制台打印的日志级别
                         format=LOGGINTFORMAT,
@@ -96,5 +98,8 @@ if __name__ == "__main__":
     html = HTMLPATH
     html_old = HTMLOLDPATH
     old_sitemap = OLDSITEMAPPATH
-    pt = compare(html_old, html, old_sitemap)
-    pt.save(NEWSITEMAPPATH)
+    # pt = compare(html_old, html, old_sitemap)
+    # pt.save(NEWSITEMAPPATH)
+    pt_test = SitemapTree(file=NEWSITEMAPPATH)
+    pt_test.sort()
+    pt_test.save(NEWSITEMAPPATH)

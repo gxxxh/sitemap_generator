@@ -101,5 +101,6 @@
 </url>
 ```
 ## 参考
-[google sitemap](https://www.cnblogs.com/doinbean/p/8488466.html)
-[Sitemaps XML format](https://www.sitemaps.org/protocol.html)
+1. [google sitemap](https://developers.google.com/search/docs/advanced/sitemaps/build-sitemap)
+2. [Sitemaps XML format](https://www.sitemaps.org/protocol.html)
+3. [python lxml](https://lxml.de/3.8/index.html)

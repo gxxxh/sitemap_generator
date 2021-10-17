@@ -92,6 +92,28 @@ class SitemapTree:
         self.urlset.append(url)
         return url
 
+    @staticmethod
+    def get_url(node):
+        """
+        获取url对象的网址，用于排序
+        """
+        loc_node = node.find('loc',namespaces=node.nsmap)
+        if loc_node is None:
+            t = etree.tostring(node, pretty_print=1).decode("utf-8")
+            logging.error("node \n {} does not include loc".format(t))
+            return ""
+        return loc_node.text
+
+
+    def sort(self):
+        """
+        按照url排序
+        """
+        urls = self.urlset
+        urls[:] = sorted(self.urlset, key=self.get_url)
+
+
+
     def save(self, file_name):
         """
         savt sitemap to xml
@@ -105,3 +127,34 @@ class SitemapTree:
             logging.info('Sitemap saved in: {}'.format(file_name))
         except:
             logging.error("save " + file_name + " sitemap failed")
+
+#
+# def sort_test():
+#     xml_str = """
+#     <Interface>
+#       <Header/>
+#       <PurchaseOrder>
+#         <LineItems>
+#           <Line LIN="2.0"/>
+#           <Line LIN="3.0"/>
+#           <Line LIN="1.0"/>
+#         </LineItems>
+#       </PurchaseOrder>
+#     </Interface>
+#     """
+#     tree = etree.fromstring(xml_str)
+#
+#     def getkey(elem):
+#         # Used for sorting elements by @LIN.
+#         # returns a tuple of ints from the exploded @LIN value
+#         # '1.0' -> (1,0)
+#         # '1.0.1' -> (1,0,1)
+#         return float(elem.get('LIN'))
+#
+#     root = etree.fromstring(xml_str)
+#     lines = root.find("PurchaseOrder/LineItems")
+#     lines[:] = sorted(lines, key=getkey)
+#     t1 = etree.tostring(root, pretty_print=True).decode('utf-8')
+#     t2 = etree.tostring(root, pretty_print=True)
+#     print(t1)
+#     print(t2)
