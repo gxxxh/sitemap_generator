@@ -1,4 +1,5 @@
 import os
+import time
 import logging
 from dirtositemap import DirToSitemap
 from config import *
@@ -94,7 +95,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.ERROR,  # 控制台打印的日志级别
                         format=LOGGINTFORMAT,
                         )
-    # 对比html和html_old生成sitemap
+    # # 对比html和html_old生成sitemap
     # html = HTMLPATH
     # html_old = HTMLOLDPATH
     # old_sitemap = OLDSITEMAPPATH
@@ -102,12 +103,25 @@ if __name__ == "__main__":
     # pt.sort()
     # pt.save(NEWSITEMAPPATH)
 
-    # 通过文件夹直接生成sitemap
-    dir_path = HTMLPATH
-    sitemap = DirToSitemap(dir=dir_path, html=HTMLSUFFIX, root_url=ROOTURL, home_page=HOMEPAGE,
-                           change_freq=CHANGEFREQ_PATTERNS[3], nsmap=XMLNS, priorities=PRIORITIES, time_zone=TIMEZONE,
-                           time_pattern=LASTMODFORMAT)
-    # sitemap.add_homepage()
-    pt = sitemap.parse_dir("")
-    pt.sort()
-    pt.save(NEWSITEMAPPATH)
+    # # 通过文件夹直接生成sitemap
+    # dir_path = HTMLPATH
+    # sitemap = DirToSitemap(dir=dir_path, html=HTMLSUFFIX, root_url=ROOTURL, home_page=HOMEPAGE,
+    #                        change_freq=CHANGEFREQ_PATTERNS[3], nsmap=XMLNS, priorities=PRIORITIES, time_zone=TIMEZONE,
+    #                        time_pattern=LASTMODFORMAT)
+    # # sitemap.add_homepage()
+    # pt = sitemap.parse_dir("")
+    # pt.sort()
+    # pt.save(NEWSITEMAPPATH)
+
+    while True:
+        try:
+            logging.info("generate new sitemap")
+            html = HTMLPATH
+            html_old = HTMLOLDPATH
+            old_sitemap = OLDSITEMAPPATH
+            pt = compare(html_old, html, old_sitemap)
+            pt.sort()
+            pt.save(NEWSITEMAPPATH)
+            time.sleep(3600*24*7)#每周执行一次
+        except BaseException as be:
+            logging.info(be.args)
