@@ -1,10 +1,9 @@
 import logging
-import source.config as config
 from lxml import etree
 
 
 class SitemapTree:
-    def __init__(self, namespace=config.XMLNS, file=""):
+    def __init__(self, namespace="", file=""):
         """
         urlset is a list of URLs that should appear in the sitemap
         :param namespace: html namespace
@@ -41,8 +40,9 @@ class SitemapTree:
         cnodes = self.urlset.getchildren()
         for cnode in cnodes:
             loc_node = cnode.find('loc', namespaces=cnode.nsmap)
-            if loc_node is None:
-                logging.error("there should be a loc in url")
+            if loc_node == None:
+                logging.error("there should be a loc in url,url is {},cnode is {}".format(url,cnode))
+                continue
             if url == loc_node.text:
                 return cnode
         return None
@@ -100,8 +100,8 @@ class SitemapTree:
         """
         try:
             f = open(file_name, 'wb')
-            f.write(etree.tostring(self.urlset, xml_declaration=True, encoding=config.ENC_UTF8))
+            f.write(etree.tostring(self.urlset, xml_declaration=True, encoding='UTF-8'))
             f.close()
-            logging.info('Sitemap saved in: ', file_name)
+            logging.info('Sitemap saved in: {}'.format(file_name))
         except:
             logging.error("save " + file_name + " sitemap failed")

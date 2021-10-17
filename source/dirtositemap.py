@@ -1,11 +1,10 @@
 import os, platform, logging
-from source.config import *
-from source.sitemaptree import SitemapTree
+from sitemaptree import SitemapTree
 from datetime import datetime, timezone, timedelta
 
 
 class DirToSitemap:
-    def __init__(self, dir, html, root_url, home_page, change_freq, nsmap):
+    def __init__(self, dir, html, root_url, home_page, change_freq, nsmap, priorities, time_zone, time_pattern):
         """
         初始化一个sitemap对象
         :param dir: 文件夹目录
@@ -21,29 +20,47 @@ class DirToSitemap:
         self.root_url = root_url
         self.home_page = home_page
         self.change_freq = change_freq
+        self.priorities = priorities
+        self.tz = timezone(timedelta(hours=time_zone))
+        self.tp = time_pattern
         # self.add_dir(self.dir_path)
 
-    def add_homepage(self):
-        """
-        添加主页对应的结点
-        :return:
-        """
-        file_path = os.path.join(self.dir_path, self.home_page)
-        if os.path.exists(file_path):
-            self.add_file("", homepage=1)
-        else:
-            logging.error("no index.html file in the folder")
+    # def add_homepage(self):
+    #     """
+    #     添加主页对应的结点
+    #     :return:
+    #     """
+    #     file_path = os.path.join(self.dir_path, self.home_page)
+    #     if os.path.exists(file_path):
+    #         self.add_file("", homepage=1)
+    #     else:
+    #         logging.error("no index.html file in the folder")
 
-    def path_to_url(self, rpath):
+    def change_lastmod(self, node, t, timepattern):
+        if t.find('+') != -1:  # %Y-%m-%dT%H:%M:%S+00:00
+            if self.tp == '%Y-%m-%dT%H:%M:%S+00:00':
+                node.find('lastmod', namespaces=node.nsmap).text = t
+            elif self.tp == '%Y-%m-%d':
+                node.find('lastmod', namespaces=node.nsmap).text = t[0:t.find('T')]
+            else:
+                logging.error('sitemap time pattern should be %Y-%m-%dT%H:%M:%S+00:00 or %Y-%m-%d')
+        else:
+            # 缺少信息，不知道时区无法补充时间信息，只能直接拷贝
+            node.find('lastmod', namespaces=node.nsmap).text = t
+
+    def path_to_url(self, rpath, html):
         """
         根据相对路径获取其对应的url
         :param rpath: 相对项目的相对路径
         :return:
         """
+        # 根域名
+        if rpath == self.home_page:
+            return self.root_url
         if (platform.system() == 'Windows'):
             rpath = '/'.join(rpath.split('\\'))
         # 是否添加 html 后缀
-        if self.html is True:
+        if html is True:
             if rpath[-5:] != ".html":
                 rpath = rpath + ".html"
         else:
@@ -62,10 +79,12 @@ class DirToSitemap:
         :param path: 相对根目录的相对路径
         :return:
         """
+        if rpath == self.home_page:
+            return 1
         if (platform.system() == 'Windows'):
-            path_ = '/'.join(rpath.split('\\'))
-        depth = path_.count('/')
-        return PRIORITIES[depth+1]
+            rpath = '/'.join(rpath.split('\\'))
+        depth = rpath.count('/')
+        return self.priorities[depth + 1]
 
     def add_file(self, rpath, homepage=0):
         """
@@ -74,16 +93,15 @@ class DirToSitemap:
         :param homepage: 是否为主页
         :return:
         """
-        if homepage:
-            url = self.root_url
-            priority = PRIORITIES[0]
-        else:
-            url = self.path_to_url(rpath)
-            priority = self.get_priority(rpath)
-        tz_utc = timezone(timedelta(hours=0))
+        # if homepage:
+        #     url = self.root_url
+        #     priority = self.priorities[0]
+        # else:
+        url = self.path_to_url(rpath,self.html)
+        priority = self.get_priority(rpath)
         # 获得带时区的UTC时间
-        current_time_utc = datetime.utcnow().replace(tzinfo=tz_utc)
-        lastmod = datetime.strftime(current_time_utc, '%Y-%m-%dT%H:%M:%S+00:00')
+        current_time_utc = datetime.utcnow().replace(tzinfo=self.tz)
+        lastmod = datetime.strftime(current_time_utc, self.tp)
         cur_node = self.sitemap_tree.add_url(loc=url, lastmod=lastmod, changefreq=self.change_freq, priority=priority)
         if cur_node == None:
             logging.error("add file " + rpath + " failed.")
@@ -97,8 +115,8 @@ class DirToSitemap:
         # 文件夹的绝对路径
         apath = os.path.join(self.dir_path, rpath)
         files = os.listdir(apath)
-        if (rpath == "" and self.home_page in files):
-            files.remove(self.home_page)
+        # if (rpath == "" and self.home_page in files):
+        #     files.remove(self.home_page)
         for file_name in files:
             temp_path = os.path.join(apath, file_name)
             if os.path.isfile(temp_path):

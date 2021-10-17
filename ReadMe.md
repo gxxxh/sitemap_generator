@@ -30,10 +30,76 @@
 
 
 ## example
-1. index.html文件内容修改
-2. 新增了release_process.html
-3. 删除了pull_request.html
+### 删除(url项删除)
+1. errors.html
+2. arch/frontend/tensorflow.html
+### 修改（重新设定lastmod)
+1. search.html
+2. arch/runtimes/vulkan.html
+### 未修改（lastmod不变）
+1. arch/benchmark.html
+2. ...
 
+
+###  sitemap 对比
+#### oldsitemap
+```
+-<url>
+<loc>https://tvmchinese.github.io/errors.html</loc>
+<lastmod>2021-10-16T13:02:12+00:00</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.8</priority>
+</url>
+
+-<url>
+<loc>https://tvmchinese.github.io/arch/frontend/tensorflow.html</loc>
+<lastmod>2021-10-16T13:02:12+00:00</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.51</priority>
+</url>
+
+-<url>
+<loc>https://tvmchinese.github.io/search.html</loc>
+<lastmod>2021-10-16T13:02:12+00:00</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.8</priority>
+</url>
+
+-<url>
+<loc>https://tvmchinese.github.io/arch/runtimes/vulkan.html</loc>
+<lastmod>2021-10-16T13:02:12+00:00</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.51</priority>
+</url>
+
+-<url>
+<loc>https://tvmchinese.github.io/arch/benchmark.html</loc>
+<lastmod>2021-10-16T13:02:12+00:00</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.64</priority>
+</url>
+```
+#### new sitemap
+```
+-<url>
+<loc>https://tvmchinese.github.io/search.html</loc>
+<lastmod>2021-10-16T13:20:48+00:00</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.8</priority>
+</url>
+-<url>
+<loc>https://tvmchinese.github.io/arch/runtimes/vulkan.html</loc>
+<lastmod>2021-10-16T13:20:48+00:00</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.51</priority>
+</url>
+-<url>
+<loc>https://tvmchinese.github.io/arch/benchmark.html</loc>
+<lastmod>2021-10-16T13:02:12+00:00</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.64</priority>
+</url>
+```
 ## 参考
 [google sitemap](https://www.cnblogs.com/doinbean/p/8488466.html)
 [Sitemaps XML format](https://www.sitemaps.org/protocol.html)
