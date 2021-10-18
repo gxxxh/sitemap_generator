@@ -21,8 +21,8 @@
   <component name="ChangeListManager">
     <list default="true" id="1c5657ab-ac6b-43c0-8130-c95df67db700" name="Default Changelist" comment="add time">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/generate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/sitemaptree.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/sitemaptree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/generate.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/generate_sitemap.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +56,7 @@
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RunManager">
-    <configuration name="generate" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="generate_sitemap" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="sitemap_generator" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -69,7 +69,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="D:\研一\sitemap\sitemap_generator\source\generate.py" />
+      <option name="SCRIPT_NAME" value="D:\研一\sitemap\sitemap_generator\source\generate_sitemap.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -80,7 +80,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.generate" />
+        <item itemvalue="Python.generate_sitemap" />
       </list>
     </recent_temporary>
   </component>
@@ -95,7 +95,7 @@
       <workItem from="1634387725879" duration="3340000" />
       <workItem from="1634436955385" duration="13719000" />
       <workItem from="1634537982811" duration="172000" />
-      <workItem from="1634551188179" duration="2602000" />
+      <workItem from="1634551188179" duration="4618000" />
     </task>
     <task id="LOCAL-00001" summary="change time pattern">
       <created>1634441015592</created>

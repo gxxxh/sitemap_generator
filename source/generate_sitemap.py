@@ -47,7 +47,7 @@ def parse_dir(dir, cur_path=""):
     return result
 
 
-def compare(old_dir, new_dir, old_sitemap, ):
+def compare(old_dir, new_dir, old_sitemap, html):
     """
 
     :param old_dir: 绝对路径
@@ -56,12 +56,13 @@ def compare(old_dir, new_dir, old_sitemap, ):
     :return:
     """
     # sitemaptree for dir html
-    sitemap = DirToSitemap(dir=new_dir, html=HTMLSUFFIX, root_url=ROOTURL, home_page=HOMEPAGE,
+    sitemap = DirToSitemap(dir=new_dir, html=html, root_url=ROOTURL, home_page=HOMEPAGE,
                            change_freq=CHANGEFREQ_PATTERNS[3], nsmap=XMLNS, priorities=PRIORITIES, time_zone=TIMEZONE,
                            time_pattern=LASTMODFORMAT)
     # sitemap.add_homepage()
     pt = sitemap.parse_dir("")
-
+    if os.path.exists(old_sitemap) == False or os.path.exists(old_dir) == False:
+        return pt
     # sitemaptree for dir html_old
     pt_old = SitemapTree(file=old_sitemap)
     path_file_dic = parse_dir(old_dir)
@@ -91,6 +92,7 @@ def compare(old_dir, new_dir, old_sitemap, ):
                 sitemap.change_lastmod(new_node, old_lastmod, sitemap.tp)
     return pt
 
+
 # if __name__ == "__main__":
 logging.basicConfig(level=logging.ERROR,  # 控制台打印的日志级别
                     format=LOGGINTFORMAT,
@@ -101,12 +103,13 @@ parser.add_argument('--ndir', help="new dir path")
 parser.add_argument('--odir', help="old dir path")
 parser.add_argument('--ositemap', help="old sitemap path")
 parser.add_argument('--sitemap', help="new sitemap path", default="")
-    # parser.add_argument('--htmlsuffix',action='store_true', default=True)
+parser.add_argument('--html', action='store_false', help="contains .html suffix, default true")
+
 args = parser.parse_args()
-print(args)
-print(os.path.abspath(args.ndir))
-print(os.path.abspath(args.odir))
-print(os.path.abspath(args.ositemap))
-pt = compare(os.path.abspath(args.ndir), os.path.abspath(args.odir), os.path.abspath(args.ositemap))
+
+pt = compare(os.path.abspath(args.odir),
+             os.path.abspath(args.ndir),
+             os.path.abspath(args.ositemap),
+             args.html)
 pt.sort()
 pt.save(os.path.abspath(args.sitemap))

@@ -40,7 +40,7 @@ XMLNS = "http://www.sitemaps.org/schemas/sitemap/0.9"
 # whether contains .html suffix in url
 HTMLSUFFIX = True
 
-# lastmod format can be '%Y-%m-%dT%H:%M:%S+00:00' or '%Y-%m-%d'
+# lastmod format can be '%Y-%m-%dT%H:%M:%S+08:00' or '%Y-%m-%d'
 LASTMODFORMAT = '%Y-%m-%d'
 
 # log format
