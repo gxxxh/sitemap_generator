@@ -1,5 +1,6 @@
 import os
 import time
+import argparse
 import logging
 from dirtositemap import DirToSitemap
 from config import *
@@ -90,38 +91,22 @@ def compare(old_dir, new_dir, old_sitemap, ):
                 sitemap.change_lastmod(new_node, old_lastmod, sitemap.tp)
     return pt
 
-
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.ERROR,  # 控制台打印的日志级别
-                        format=LOGGINTFORMAT,
-                        )
-    # # 对比html和html_old生成sitemap
-    # html = HTMLPATH
-    # html_old = HTMLOLDPATH
-    # old_sitemap = OLDSITEMAPPATH
-    # pt = compare(html_old, html, old_sitemap)
-    # pt.sort()
-    # pt.save(NEWSITEMAPPATH)
-
-    # # 通过文件夹直接生成sitemap
-    # dir_path = HTMLPATH
-    # sitemap = DirToSitemap(dir=dir_path, html=HTMLSUFFIX, root_url=ROOTURL, home_page=HOMEPAGE,
-    #                        change_freq=CHANGEFREQ_PATTERNS[3], nsmap=XMLNS, priorities=PRIORITIES, time_zone=TIMEZONE,
-    #                        time_pattern=LASTMODFORMAT)
-    # # sitemap.add_homepage()
-    # pt = sitemap.parse_dir("")
-    # pt.sort()
-    # pt.save(NEWSITEMAPPATH)
-
-    while True:
-        try:
-            logging.info("generate new sitemap")
-            html = HTMLPATH
-            html_old = HTMLOLDPATH
-            old_sitemap = OLDSITEMAPPATH
-            pt = compare(html_old, html, old_sitemap)
-            pt.sort()
-            pt.save(NEWSITEMAPPATH)
-            time.sleep(3600*24*7)#每周执行一次
-        except BaseException as be:
-            logging.info(be.args)
+# if __name__ == "__main__":
+logging.basicConfig(level=logging.ERROR,  # 控制台打印的日志级别
+                    format=LOGGINTFORMAT,
+                    )
+# 对比html和html_old生成sitemap
+parser = argparse.ArgumentParser()
+parser.add_argument('--ndir', help="new dir path")
+parser.add_argument('--odir', help="old dir path")
+parser.add_argument('--ositemap', help="old sitemap path")
+parser.add_argument('--sitemap', help="new sitemap path", default="")
+    # parser.add_argument('--htmlsuffix',action='store_true', default=True)
+args = parser.parse_args()
+print(args)
+print(os.path.abspath(args.ndir))
+print(os.path.abspath(args.odir))
+print(os.path.abspath(args.ositemap))
+pt = compare(os.path.abspath(args.ndir), os.path.abspath(args.odir), os.path.abspath(args.ositemap))
+pt.sort()
+pt.save(os.path.abspath(args.sitemap))

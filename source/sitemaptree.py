@@ -116,7 +116,7 @@ class SitemapTree:
         :param file_name:
         :return:
         """
-
+        # self.etree.write(file_name, pretty_print=True, xml_declaration=True, encoding="utf-8")
         try:
             # f = open(file_name, 'wb')
             # f.write(etree.tostring(self.urlset, xml_declaration=True, encoding='UTF-8'))
